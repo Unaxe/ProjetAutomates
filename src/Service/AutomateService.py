@@ -40,6 +40,36 @@ class Automate:
         for state in self.automate_states:
             state.to_string()
         print("\n")
+        print("oui")
+
+
+
+    def determinisation(self):
+        a_traiter = []
+        nv_etat = []
+        traiter = []
+        new=""
+
+        for i in self.initial_states:
+            a_traiter.append(self.automate_states[int(i)])
+            for a in a_traiter:
+                for c in range(len(a.transitions)):
+#La en gros je cherche dans les transition à regrouper les états  qui ont transité par a et puis par b depuis tout les état initiaux,
+#faut créer deux nouvelles transistions avec comme nom l'éat initiale et transition a et b et les états récupérés au dessus
+#A la fin faudra le généraliser dans une fonction
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
