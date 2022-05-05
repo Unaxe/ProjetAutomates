@@ -1,9 +1,11 @@
 from src.Service.StateService import State
+import numpy as np
 class Automate:
     def __init__(self, name, file_name):
         self.automate_name = name
         self.file_name = f"src/Service/automates/{file_name}.txt"
         self.automate_states = []
+        self.list_symbol =[]
         file = open(self.file_name, "r")
         lines = file.readlines()
         file.close()
@@ -11,8 +13,8 @@ class Automate:
         self.nb_states = int(lines[1])
         self.nb_snitial_states = int(lines[2].split(" ")[0])
         self.nb_final_states = int(lines[3].split(" ")[0])
-        self.initial_states = lines[2].split(" ")[1:-1]
-        self.final_states = lines[3].split(" ")[1:-1]
+        self.initial_states = lines[2].split(" ")[1::1]
+        self.final_states = lines[3].split(" ")[1::1]
         self.nb_transitions = int(lines[4])
         self.transitions = []
         for i in range(5, 5 + self.nb_transitions):
@@ -25,6 +27,8 @@ class Automate:
             start = int(transition[0])
             end = int(transition[2])
             symbol = transition[1]
+            if symbol not in self.list_symbol :
+                self.list_symbol.append(symbol)
             self.automate_states[start].addTransition({"symbol":symbol, "end": self.automate_states[end]})
 
     def to_string(self):
@@ -44,16 +48,25 @@ class Automate:
 
 
 
+
     def determinisation(self):
         a_traiter = []
         nv_etat = []
         traiter = []
         new=""
-
+        new_end=[]
         for i in self.initial_states:
+            new += i
             a_traiter.append(self.automate_states[int(i)])
             for a in a_traiter:
                 for c in range(len(a.transitions)):
+                   new_end[np.where(np.array(self.list_symbol)==a.transitions[c]["symbol"])] = a.transitions[c]["end"].state_name
+        for i in range(len(self.list_symbol)):
+            self.automate_states[int(new)].addTransition({"symbol" : self.list_symbol[i], "end": new[i]})
+            a_traiter.append(new_end[i])
+
+
+
 #La en gros je cherche dans les transition à regrouper les états  qui ont transité par a et puis par b depuis tout les état initiaux,
 #faut créer deux nouvelles transistions avec comme nom l'éat initiale et transition a et b et les états récupérés au dessus
 #A la fin faudra le généraliser dans une fonction
