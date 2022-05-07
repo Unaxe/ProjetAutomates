@@ -60,6 +60,7 @@ class Automate:
                     new_end[int(np.where(np.array(self.list_symbol) == a.transitions[c]["symbol"]))] = a.transitions[c][
                         "end"].state_name
         for i in range(len(self.list_symbol)):
+
             self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
             a_traiter.append(new_end[i])
 
@@ -84,12 +85,12 @@ class Automate:
             first_etat= self.automate_states[0]
             for i in range(len(mot)):
                 for j in range(len(first_etat.transitions)):
-                    if(mot[i] == first_etat.transitions[j]["symbol"]):
+                    if mot[i] == first_etat.transitions[j]["symbol"] or mot[i] == "*":
                         first_etat = first_etat.transitions[j]["end"]
             if(first_etat.is_final):
-                print("Le mot est reconnu")
+                print(f"Le mot: {mot} est reconnu")
             else:
-                print("Le mot n'est pas reconnu")
+                print(f"Le mot : {mot} n'est pas reconnu")
 
 
 
