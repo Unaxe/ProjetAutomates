@@ -15,7 +15,7 @@ class Automate:
         self.nb_states = int(lines[1])
         self.nb_snitial_states = int(lines[2].split(" ")[0])
         self.nb_final_states = int(lines[3].split(" ")[0])
-        self.initial_states = lines[2].split(" ")[1::1]
+        self.initial_states = lines[2].strip().split(" ")[1::1]
         self.final_states = lines[3].split(" ")[1::1]
         self.nb_transitions = int(lines[4])
         self.transitions = []
@@ -52,17 +52,23 @@ class Automate:
         a_traiter = []
         new = ""
         new_end = []
-        for i in self.initial_states:
-            new += i
-            a_traiter.append(self.automate_states[int(i)])
-            for a in a_traiter:
-                for c in range(len(a.transitions)):
-                    new_end[int(np.where(np.array(self.list_symbol) == a.transitions[c]["symbol"]))] = a.transitions[c][
-                        "end"].state_name
-        for i in range(len(self.list_symbol)):
 
-            self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
-            a_traiter.append(new_end[i])
+        if '*' in self.list_symbol:
+            print("L'automate est assynchrone")
+
+        else:
+
+            for i in self.initial_states:
+                new += i
+                a_traiter.append(self.automate_states[int(i)])
+                for a in a_traiter:
+                    for c in range(len(a.transitions)):
+                        new_end[int(np.where(np.array(self.list_symbol) == a.transitions[c]["symbol"]))] = a.transitions[c][
+                            "end"].state_name
+            for i in range(len(self.list_symbol)):
+
+                self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
+                a_traiter.append(new_end[i])
 
 
     def lire_mot(self):
@@ -91,6 +97,27 @@ class Automate:
                 print(f"Le mot: {mot} est reconnu")
             else:
                 print(f"Le mot : {mot} n'est pas reconnu")
+
+    def reconnaitre_mot_asynchrone(self):
+        list_mot = self.lire_mot()
+        for mot in list_mot:
+            mot.split("")
+            for i in self.initial_states:
+                for j in range(len(self.automate_states[int(i)].transitions)):
+                    if mot[0] == self.automate_states[int(i)].transitions[j]["symbol"]:
+                        first_etat = self.automate_states[int(i)]
+
+            first_etat= self.automate_states[0]
+            for i in range(len(mot)):
+                for j in range(len(first_etat.transitions)):
+                    if mot[i] == first_etat.transitions[j]["symbol"] or mot[i] == "*":
+                        first_etat = first_etat.transitions[j]["end"]
+            if(first_etat.is_final):
+                print(f"Le mot: {mot} est reconnu")
+            else:
+                print(f"Le mot : {mot} n'est pas reconnu")
+
+
 
 
 
