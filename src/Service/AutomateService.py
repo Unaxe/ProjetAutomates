@@ -57,18 +57,17 @@ class Automate:
 
         if '*' in self.list_symbol:
             print("L'automate est assynchrone")
-
         else:
-
             for i in self.initial_states:
                 new += i
                 a_traiter.append(self.automate_states[int(i)])
+            while len(a_traiter) != 0:
                 for a in a_traiter:
                     for c in range(len(a.transitions)):
                         new_end[self.list_symbol.index(a.transitions[c]["symbol"])] += a.transitions[c]["end"].state_name
-            for i in range(len(self.list_symbol)):
-                self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
-                a_traiter.append(new_end[i])
+                for i in range(len(self.list_symbol)):
+                    self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
+                    a_traiter.append(new_end[i])
 
 
     def lire_mot(self):
