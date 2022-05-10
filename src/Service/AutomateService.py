@@ -1,5 +1,5 @@
 from src.Service.StateService import State
-import numpy as np
+
 
 
 class Automate:
@@ -33,6 +33,8 @@ class Automate:
                 self.list_symbol.append(symbol)
             self.automate_states[start].addTransition({"symbol": symbol, "end": self.automate_states[end]})
 
+
+
     def to_string(self):
         print(f"Automate {self.automate_name}")
         print(f"Nombre de symboles: {self.nb_symbols}")
@@ -63,10 +65,8 @@ class Automate:
                 a_traiter.append(self.automate_states[int(i)])
                 for a in a_traiter:
                     for c in range(len(a.transitions)):
-                        new_end[int(np.where(np.array(self.list_symbol) == a.transitions[c]["symbol"]))] = a.transitions[c][
-                            "end"].state_name
+                        new_end[self.list_symbol.index(a.transitions[c]["symbol"])] += a.transitions[c]["end"].state_name
             for i in range(len(self.list_symbol)):
-
                 self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
                 a_traiter.append(new_end[i])
 
