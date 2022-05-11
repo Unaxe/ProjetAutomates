@@ -48,27 +48,55 @@ class Automate:
         for state in self.automate_states:
             state.to_string()
         print("\n")
-        print("oui")
 
     def determinisation(self):
+
+        if self.est_un_automate_asynchrone():
+            print("L'automate est assynchrone")
+            #TODO: determinisation de l'automate asynchrone
+        elif self.est_un_automate_deterministe():
+            self.determinisation_automate_synchrone()
+        else:
+            # TODO Déterminisation
+            self.completion()
+        #Afficher automate
+
+    def est_un_automate_asynchrone(self):
+        for state in self.automate_states:
+            for transition in state.transitions:
+                if transition["symbol"] == '*':
+                    return True
+        return False
+
+    def est_un_automate_deterministe(self): #TODO : à compléter
+        pass
+
+    def est_un_automate_complet(self): #TODO : à compléter
+        pass
+
+    def completion(self): #TODO : à compléter
+        # Nouvel etat : Poubelle
+        # Pour chaque etat
+            # Pour chaque symbole
+                # Si l'etat n'a pas de transition avec ce symbole
+                    # Ajouter une transition avec le symbole et l'etat Poubelle
+        pass
+
+    def determinisation_automate_synchrone(self): #TODO : à compléter
         a_traiter = []
         new = ""
         new_end = []
 
-        if '*' in self.list_symbol:
-            print("L'automate est assynchrone")
-        else:
-            for i in self.initial_states:
-                new += i
-                a_traiter.append(self.automate_states[int(i)])
-            while len(a_traiter) != 0:
-                for a in a_traiter:
-                    for c in range(len(a.transitions)):
-                        new_end[self.list_symbol.index(a.transitions[c]["symbol"])] += a.transitions[c]["end"].state_name
-                for i in range(len(self.list_symbol)):
-                    self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
-                    a_traiter.append(new_end[i])
-
+        for i in self.initial_states:
+            new += i
+            a_traiter.append(self.automate_states[int(i)])
+        while len(a_traiter) != 0:
+            for a in a_traiter:
+                for c in range(len(a.transitions)):
+                    new_end[self.list_symbol.index(a.transitions[c]["symbol"])] += a.transitions[c]["end"].state_name
+            for i in range(len(self.list_symbol)):
+                self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
+                a_traiter.append(new_end[i])
 
     def lire_mot(self):
         list_mot = []
