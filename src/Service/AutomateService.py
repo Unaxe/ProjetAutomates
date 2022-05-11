@@ -3,24 +3,32 @@ from src.Service.StateService import State
 
 
 class Automate:
-    def __init__(self, name, file_name):
+    """
+    Class that represents the automate
+    an automate needs :
+    - a name
+    - a list of states
+    - a list of initials states
+    - a list of finals states
+    - a list of transitions
+    - a list of symbols
+    - the numb of symbols
+    - the numb of states
+    - the states
+    """
+    def __init__(self, name, states, initial_states, final_states, transitions, symbols, nb_initial_states,
+                 nb_final_states , nb_transitions):
         self.automate_name = name
-        self.file_name = f"src/Service/automates/{file_name}.txt"
         self.automate_states = []
-        self.list_symbol = []
-        file = open(self.file_name, "r")
-        lines = file.readlines()
-        file.close()
-        self.nb_symbols = int(lines[0])
-        self.nb_states = int(lines[1])
-        self.nb_snitial_states = int(lines[2].split(" ")[0])
-        self.nb_final_states = int(lines[3].split(" ")[0])
-        self.initial_states = lines[2].strip().split(" ")[1::1]
-        self.final_states = lines[3].split(" ")[1::1]
-        self.nb_transitions = int(lines[4])
-        self.transitions = []
-        for i in range(5, 5 + self.nb_transitions):
-            self.transitions.append(lines[i])
+        self.list_symbol = symbols
+        self.nb_symbols = symbols
+        self.nb_states = len(states)
+        self.nb_initial_states = nb_initial_states
+        self.nb_final_states = nb_final_states
+        self.initial_states = initial_states
+        self.final_states = final_states
+        self.nb_transitions = nb_transitions
+        self.transitions = transitions
         for i in range(0, self.nb_states):
             is_initial = str(i) in self.initial_states
             is_final = str(i) in self.final_states
@@ -39,7 +47,7 @@ class Automate:
         print(f"Automate {self.automate_name}")
         print(f"Nombre de symboles: {self.nb_symbols}")
         print(f"Nombre d'états: {self.nb_states}")
-        print(f"Nombre d'états initiales: {self.nb_snitial_states}")
+        print(f"Nombre d'états initiales: {self.nb_initial_states}")
         print(f"Nombre d'états finaux: {self.nb_final_states}")
         print(f"Etats initiales: {self.initial_states}")
         print(f"Etats finaux: {self.final_states}")
@@ -83,20 +91,28 @@ class Automate:
         pass
 
     def determinisation_automate_synchrone(self): #TODO : à compléter
-        a_traiter = []
-        new = ""
-        new_end = []
+        # I est l'ensemble des états initiaux de l'automate non déterministe. C'est donc bien un sous-ensemble de Q.
+        a = Automate(self.name, 1, "1", "final_states", "", self.symbols, 1,"nb_final_states" , 0)
+        #"tant que l'ensemble des états à traiter n'est pas vide"
+        states_to_process = []
+        for state in a.automate_states:
+            states_to_process.append(state)
+        while(len(states_to_process) >0 ):
+            state = states_to_process.pop()
+            # On considère tous les éléments de l'alphabet, les uns après les autres, et on calcule les transitions
+            # sortantes, si elle existent. Les états cibles sont créés s'ils n'existent pas déjà dans l'automate déterministe.
+            for symbol in a.list_symbol:
+                # On considère tous les éléments p de p' pour lesquels il existe, dans l'automate non déterministe,
+                # une transition sortante (p,x,q).
+                # On calcule ainsi q' qui est l'ensemble des états de l'automate non déterministe accessibles (dans l'automate non
+                # déterministe) par une transition étiquetée 'x' partant d'un état (de l'automate non déterministe) appartenant à p'.
+                # La transition (p',x,q') est ajoutée à l'automate déterministe
+                # Si l'état q' n'est pas déjà présent dans l'automate déterministe, il y est ajouté. Il est alors marqué "à traiter".
+                pass
+            # l'etat est marqué déjà traité
+        # Les états terminaux de l'automate déterministes sont tous les états contenant au moins un état terminal dans l'automate non déterministe.
+        return a
 
-        for i in self.initial_states:
-            new += i
-            a_traiter.append(self.automate_states[int(i)])
-        while len(a_traiter) != 0:
-            for a in a_traiter:
-                for c in range(len(a.transitions)):
-                    new_end[self.list_symbol.index(a.transitions[c]["symbol"])] += a.transitions[c]["end"].state_name
-            for i in range(len(self.list_symbol)):
-                self.automate_states[int(new)].addTransition({"symbol": self.list_symbol[i], "end": new[i]})
-                a_traiter.append(new_end[i])
 
     def lire_mot(self):
         list_mot = []
