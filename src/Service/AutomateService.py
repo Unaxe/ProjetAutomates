@@ -61,7 +61,7 @@ class Automate:
 
         if self.est_un_automate_asynchrone():
             print("L'automate est assynchrone")
-            #TODO: determinisation de l'automate asynchrone
+            self.determinisation_automate_asynchrone()
         elif self.est_un_automate_deterministe():
             self.determinisation_automate_synchrone()
         else:
@@ -80,14 +80,21 @@ class Automate:
         pass
 
     def est_un_automate_complet(self): #TODO : à compléter
+        # prendre tous les etats
+            # Vérifier que chaque etat a une transition par chaque symbole
+            # retourner le resultat
         pass
 
     def completion(self): #TODO : à compléter
         # Nouvel etat : Poubelle
+        # Nouvelle transition : Poubelle -> Poubelle pour tous les symboles
         # Pour chaque etat
             # Pour chaque symbole
                 # Si l'etat n'a pas de transition avec ce symbole
                     # Ajouter une transition avec le symbole et l'etat Poubelle
+        pass
+
+    def determinisation_automate_asynchrone(self): #TODO : à compléter
         pass
 
     def determinisation_automate_synchrone(self): #TODO : à compléter
