@@ -77,15 +77,30 @@ class Automate:
         return False
 
     def est_un_automate_deterministe(self): #TODO : à compléter
+        for state in self.automate_states:
+            for transition in state.transitions:
+                if transition["symbol"] != "*":
+                    if len(transition["end"].transitions) > 1:
+                        return False
+        return True
+
         pass
 
     def est_un_automate_complet(self): #TODO : à compléter
         # prendre tous les etats
+        for state in self.automate_states:
+
             # Vérifier que chaque etat a une transition par chaque symbole
+            for symbol in self.list_symbol:
+                if symbol not in state.transitions:
+                    return False
+        return True
             # retourner le resultat
         pass
 
     def completion(self): #TODO : à compléter
+        if est_un_automate_détérministe(self) == true or est_un_automate_complet(self) == false:
+
         # Nouvel etat : Poubelle
         # Nouvelle transition : Poubelle -> Poubelle pour tous les symboles
         # Pour chaque etat
