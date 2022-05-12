@@ -99,7 +99,12 @@ class Automate:
         pass
 
     def completion(self): #TODO : à compléter
-        if est_un_automate_détérministe(self) == true or est_un_automate_complet(self) == false:
+        if not self.est_un_automate_complet():
+            self.automate_states.append(State('P', False, False))
+            for state in self.automate_states :
+                for symbol in self.list_symbol :
+                    if state.
+
 
         # Nouvel etat : Poubelle
         # Nouvelle transition : Poubelle -> Poubelle pour tous les symboles
